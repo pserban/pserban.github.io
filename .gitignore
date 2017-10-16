@@ -1,0 +1,3 @@
+# Files ignored by GIT SCM
+# Temporary and system files used by Vim editor
+*.*~
