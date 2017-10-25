@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Serban Patriciu</title>
+  <meta name="description" content="sql server database administrator, sql developer">
+</head>
+  <body>
+    <header>
+      <h2>Serban Patriciu</h2>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/index.html">Posts</a>
+      </nav>
+    </header>
+    <section>
+      <article>
+        <h2>Simple factorial</h2>
+        <h4><time date="2017-10-25" pubdate>October 25 2017</time></h4>
+        <p>The function <code>Get-Factorial</code> calculates the factorial of a natural
+            number using recursion. The formula for factorial is: 
+            n! = 1 &lowast; 2 &lowast; 3 &lowast; ... &lowast; n </p>
+        <p>In order to develop it using BDD, the <code>Pester</code> module was used, in
+            the context of PowerSheel version 5.</p>
+        <p>Here is the code of the function:</p>
+        <pre><code>
+                # Get-Factorial.ps1
+                            
+                function Get-Factorial([uint64] $value) {                 
+                    if ($value -le 1) {
+                        return 1
+                    }
+                    else {
+                        $fact = Get-Factorial($value - 1)
+                        return $fact * $value
+                    }
+                }            
+        </code></pre>
+        <p>The code of the associated Pester Tests:</p>
+        <pre><code>
+                # Get-Factorial.Tests.ps1
+                
+                # Loads the Get-Factorial.ps1 file
+                $here = (Split-Path -Parent $MyInvocation.MyCommand.Path)
+                . $here\Get-Factorial.ps1
+                
+                Describe 'Get-Factorial' {
+                    It 'Given no parameters, calculates 0! which is 1.' {
+                        $result = Get-Factorial
+                        $result | Should -Be 1
+                    }
+                
+                    Context 'Run with different natural numbers' {
+                        It "Given valid -value &lt;Number&gt;, calculates &lt;Number&gt; and it returns &lt;Expected&gt;" -TestCases @(
+                            @{ Number = 0; Expected = 1 }
+                            @{ Number = 1; Expected = 1 }
+                            @{ Number = 2; Expected = 2 }
+                            @{ Number = 3; Expected = 6 }
+                            @{ Number = 4; Expected = 24 }
+                            @{ Number = 5; Expected = 120 }
+                            @{ Number = 6; Expected = 720 }
+                            @{ Number = 7; Expected = 5040 }
+                            @{ Number = 8; Expected = 40320 }
+                        ) {
+                            param($Number, $Expected)
+                
+                            $result = Get-Factorial($Number)
+                
+                            $result | Should -Be $Expected
+                        }
+                    }
+                }            
+        </code></pre>
+        <p>The output from running the 
+            <code>Get-Factorial.Tests.ps1</code> file:
+        </p>
+        <pre><output>
+                Describing Get-Factorial
+                [+] Given no parameters, calculates 0! which is 1. 18ms
+              
+                Context Run with different natural numbers
+                  [+] Given valid -value 0, calculates 0! and it returns 1 16ms
+                  [+] Given valid -value 1, calculates 1! and it returns 1 9ms
+                  [+] Given valid -value 2, calculates 2! and it returns 2 6ms
+                  [+] Given valid -value 3, calculates 3! and it returns 6 7ms
+                  [+] Given valid -value 4, calculates 4! and it returns 24 6ms
+                  [+] Given valid -value 5, calculates 5! and it returns 120 6ms
+                  [+] Given valid -value 6, calculates 6! and it returns 720 11ms
+                  [+] Given valid -value 7, calculates 7! and it returns 5040 7ms
+                  [+] Given valid -value 8, calculates 8! and it returns 40320 6ms            
+        </output></pre>   
+        <p>A screenshot of running the tests with associated results:</p>
+        <figure>
+            <figcaption>
+                Screenshot of <code>Get-Factorial.Tests.ps1</code> execution.
+            </figcaption>
+            <img src="factorialpester01.png" height="300" width="743">                
+        </figure>    
+      </article>
+    </section>
+    <footer class="site-footer">
+    </footer>
+  </body>
+</html>
