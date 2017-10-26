@@ -33,17 +33,47 @@
             <a href="https://en.wikipedia.org/wiki/PowerShell">PowerShell</a> version 5.0.</p>
         <p>Here is the code of the function:</p>
         <pre><code>
-                # Get-Factorial.ps1
-                            
-                function Get-Factorial([uint64] $value) {                 
-                    if ($value -le 1) {
-                        return 1
-                    }
-                    else {
-                        $fact = Get-Factorial($value - 1)
-                        return $fact * $value
-                    }
-                }            
+            # Get-Factorial.ps1
+            
+            &lt;#
+              .SYNOPSIS
+              Gets the factorial of a given natural number
+            
+              .DESCRIPTION
+              Gets the factorial of a natural number using the
+              formula: n! = 1 * 2 * 3 * ... * (n - 1) * n
+            
+              .INPUTS 
+              value = The natural number whose factorial we need
+            
+              .OUTPUTS
+              Returns an [uint64] value containing the calculated factorial
+            
+              .EXAMPLE
+              $fact = Get-Factorial (0) # $fact is 1
+            
+              .EXAMPLE
+              $fact = Get-Factorial (1) # $fact is 1
+            
+              .EXAMPLE
+              $fact = Get-Factorial (2) # $fact is 2
+            
+              .EXAMPLE
+              $fact = Get-Factorial (3) # $fact is 6
+            
+              .EXAMPLE
+              $fact = Get-Factorial (4) # $fact is 24
+            
+            #&gt;
+            function Get-Factorial([uint64] $value) {
+                if ($value -le 1) {
+                    return 1
+                }
+                else {
+                    $fact = Get-Factorial($value - 1)
+                    return $fact * $value
+                }
+            }           
         </code></pre>
         <p>The code of the associated Pester Tests:</p>
         <pre><code>
@@ -113,30 +143,48 @@
           </p>    
           <p>Here is the code of the function:</p>
           <pre><code>
-              # Get-FactorialStream.ps1
+            # Get-FactorialStream.ps1
+            
+            &lt;#
+              .SYNOPSIS
+              Get the factorial for each number in a stream
+            
+              .DESCRIPTION
+              Calculates the factorial for each natural number in a
+              stream of numbers and returns a stream of factorials.
+            
+              .INPUTS
+              numberStream = The stream of natural numbers
               
-              function Get-FactorialStream {
-                  param (
-                      [Parameter(Mandatory = $true,
-                       ValueFromPipeline = $true)]
-                      [uint64] $number
-                  )
-                  begin {}
-                  process {
-                      if ($number -le 1) {
-                          return 1
-                      }
-                      else {
-                          [uint64] $factorial = 1
-                          while ($number -gt 1) {
-                              $factorial *= $number
-                              $number -= 1
-                          }
-                          return $factorial
-                      }
-                  }
-                  end {}
-              }            
+              .OUTPUTS
+              Returns a stream of factorials
+              
+              .EXAMPLE
+              @(1,2,3,4) | Get-FactorialStream # Returns 1, 2, 6, 24
+                
+            #&gt;
+            function Get-FactorialStream {
+                param (
+                    [Parameter(Mandatory = $true,
+                     ValueFromPipeline = $true)]
+                    [uint64] $number
+                )
+                begin {}
+                process {
+                    if ($number -le 1) {
+                        return 1
+                    }
+                    else {
+                        [uint64] $factorial = 1
+                        while ($number -gt 1) {
+                            $factorial *= $number
+                            $number -= 1
+                        }
+                        return $factorial
+                    }
+                }
+                end {}
+            }           
           </code></pre> 
           <p>The code of the associated Pester Tests:</p>
           <pre><code>
@@ -170,6 +218,7 @@
           </output></pre>                        
       </article>
       <article>
+        <h4>Observations</h4>
         <p>Both functions <code>Get-Factorial</code> and <code>Get-FactorialStream</code> 
           where isolated so the mocking capabilities of Pester were not used.</p>
       </article>
