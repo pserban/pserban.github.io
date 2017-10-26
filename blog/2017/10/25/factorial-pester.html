@@ -6,23 +6,26 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Serban Patriciu</title>
+  <title>Technical Experiments</title>
   <meta name="description" content="sql server database administrator, sql developer">
 </head>
   <body>
     <header>            
-      <h2>Serban Patriciu</h2>
+      <h2>Technical Experiments</h2>
       <nav>
         <a href="/about.html">About</a>
         <a href="/index.html">Posts</a>
       </nav>
     </header>
     <section>
-      <article>
-        <h2>Simple factorial</h2>
+      <hgroup>
+        <h2>Factorial Functions</h2>
         <h4><time date="2017-10-25" pubdate>October 25 2017</time></h4>
+      </hgroup>
+      <article>
+        <h3>Simple factorial</h3>        
         <p>The function <code>Get-Factorial</code> calculates the factorial of a natural
-            number using recursion. The formula for factorial is: 
+            number using recursion. The formula for factorial is: <br />
             n! = 1 &lowast; 2 &lowast; 3 &lowast; ... &lowast; n </p>
         <p>In order to develop it using BDD, the <code>Pester</code> (4.0) module was used, in
             the context of PowerShell version 5.0.</p>
@@ -101,8 +104,76 @@
             <img src="factorialpester01.png" height="300" width="743">                
         </figure>    
       </article>
+      <article>
+          <h3>Factorial Stream</h3>
+          <p>The function <code>Get-FactorialStream</code> will take a stream of
+            natural numbers and for each number will calculate its factorial.
+          </p>    
+          <p>Here is the code of the function:</p>
+          <pre><code>
+              # Get-FactorialStream.ps1
+              
+              function Get-FactorialStream {
+                  param (
+                      [Parameter(Mandatory = $true,
+                       ValueFromPipeline = $true)]
+                      [uint64] $number
+                  )
+                  begin {}
+                  process {
+                      if ($number -le 1) {
+                          return 1
+                      }
+                      else {
+                          [uint64] $factorial = 1
+                          while ($number -gt 1) {
+                              $factorial *= $number
+                              $number -= 1
+                          }
+                          return $factorial
+                      }
+                  }
+                  end {}
+              }            
+          </code></pre> 
+          <p>The code of the associated Pester Tests:</p>
+          <pre><code>
+              # Get-FactorialStream.Tests.ps1
+              
+              # Loads the Get-Factorial.ps1 file
+              $here = (Split-Path -Parent $MyInvocation.MyCommand.Path)
+              . $here\Get-FactorialStream.ps1
+              
+              Describe 'Get-FactorialStream' {
+                  Context 'Run with with a stream of natural numbers' {
+                      It "Given valid stream <StreamOfInt>, calculates the factorial of each element and it returns <Expected>" -TestCases @(
+                          @{ StreamOfInt = @(0,1,2,3,4,5,6); Expected = @(1, 1, 2, 6, 24, 120, 720) }
+                      ) {
+                          param($StreamOfInt, $Expected) 
+              
+                          $StreamOfInt | Get-FactorialStream | Should -Be $Expected
+                      }
+                  }
+              }            
+          </code></pre>
+          <p>The output from running the 
+              <code>Get-FactorialStream.Tests.ps1</code> file:
+          </p>
+          <pre><output>
+              Describing Get-FactorialStream
+              
+                Context Run with with a stream of natural numbers
+                  [+] Given valid stream 0 1 2 3 4 5 6, calculates the factorial of each element and it 
+                      returns 1 1 2 6 24 120 720 90ms            
+          </output></pre>                        
+      </article>
+      <article>
+        <p>Both functions <code>Get-Factorial</code> and <code>Get-FactorialStream</code> 
+          where isolated so the mocking capabilities of Pester were not used.</p>
+      </article>
     </section>
     <footer>
+      <p>Serban Patriciu</p>
     </footer>
   </body>
 </html>
