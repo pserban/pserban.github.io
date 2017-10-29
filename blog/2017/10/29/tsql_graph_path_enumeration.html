@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Technical Experiments - PowerShell and Pester</title>
+  <meta name="description" content="t-sql, sql server cte, graph, table-valued function">
+</head>
+  <body>
+    <header>            
+      <h2>Technical Experiments</h2>
+      <nav>
+        <a href="/about.html">About</a>
+        <a href="/index.html">Posts</a>
+      </nav>
+    </header>
+    <section>
+      <hgroup>
+        <h2>Enumerating all paths in a graph using SQL Server T-SQL</h2>
+        <h4><time date="2017-10-29" pubdate>October 29 2017</time></h4>
+      </hgroup>
+      <article>
+        <h3>Database setup</h3>
+        <p>
+          In order to implement the programming objects for graph
+          processing we have to create a database, a schema, tables
+          for storing the graph information, and load the tables width
+          some sample data.
+          <ol>
+            <li>
+              Create the database:
+              <pre><code>
+                use master;
+                
+                create database ProcesareGraph;
+                go      
+              </code></pre>
+            </li>
+            <li>
+              Create the associated database schema:
+              <pre><code>
+                use ProcesareGraph;
+                go
+                
+                create schema GraphTests01;
+                go                      
+              </code></pre>
+            </li>
+            <li>
+              Create the tables to store graph configuration. There is a
+              <code>Node</code> table to store the list of nodes and an
+              <code>Edge</code> table to store the connections between nodes.
+              <pre><code>
+                create table GraphTests01.Node (
+                  Node int,
+                  constraint pk_GT01_Node primary key (Node)
+                );
+                
+                create table GraphTests01.Edge (
+                  OriginNode int,
+                  TargetNode int,
+                  constraint pk_GT01_Edge 
+                    primary key (OriginNode, TargetNode),
+                  constraint fk_GT01_Edge_Node_Origin
+                    foreign key (OriginNode) 
+                    references GraphTests01.Node(Node),
+                  constraint fk_GT01_Edge_Node_Target
+                    foreign key (TargetNode)
+                    references GraphTests01.Node(Node)
+                );                      
+              </code></pre>
+            </li>
+            <li>
+              After these database objects are created, we shall load
+              sample data first in the <code>Node</code> table and then
+              in the <code>Edge</code> table:
+              <pre><code>
+                insert into GraphTests01.Node
+                  (Node)
+                  values
+                  (1), (2), (3), (4), (5);
+                
+                insert into GraphTests01.Edge
+                  (OriginNode, TargetNode)
+                  values
+                  (1, 2),
+                  (2, 1), (2, 2), (2, 3), (2, 5),
+                  (3, 4), (3, 5),
+                  (4, 1), (4, 2);                                            
+              </code></pre>
+            </li>
+          </ol>
+        </p>
+      </article>
+      <article>
+        <h3>Establish if a path has cycles in it</h3>   
+        <p>
+          The function <code>GraphTests01.hasCycles</code> tests if a graph paths
+          represented through a string of natural numbers separated by . (dot) 
+          characters has cycles in it or not. In fact it tests if there are two
+          or more repeating values.
+          <pre><code>
+            create function GraphTests01.hasCycles(@gpath as varchar(200))
+              returns bit
+            as
+            begin
+              if exists (select count(*) 
+                      from string_split(@gpath, '.') as ss
+                      group by ss.value
+                      having count(*) > 1)
+                return 1
+              return 0;
+            end            
+          </code></pre>
+          Example call:
+          <code><pre>
+            select 
+                    '1.3.4.3.5.6' as GraphWithCycles,
+                    GraphTests01.hasCycles('1.3.4.3.5.6') as HasCycles, 
+                    '1.2.3.4.5.6' as GraphWithNoCycles,
+                    GraphTests01.hasCycles('1.2.3.4.5.6') as HasNoCycles;           
+          </pre></code>
+          The output from running the above code is:
+          <pre><output>
+            GraphWithCycles HasCycles GraphWithNoCycles HasNoCycles
+            --------------- --------- ----------------- -----------
+            1.3.4.3.5.6     1         1.2.3.4.5.6       0
+            
+            (1 row affected)      
+          </output></pre>
+        </p>
+      </article>   
+      <article>
+        <h3>Establish if a path has cycles in it</h3>
+        <p>
+          The function <code>GraphTests01.getNodePaths</code> gets a list of all 
+          paths starting from a given node. If a path is a cycle it will end
+          with the repeating node. The code for it:
+        </p>
+        <pre><code>
+          create function GraphTests01.getNodePaths(@startNode as int)
+            returns table
+          as return
+          with NodeList (Node, List) as (
+          select 
+              a.Node
+              , cast(cast(a.Node as varchar(3)) + '.' as varchar(max)) as List
+            from GraphTests01.Node as a
+            where
+                a.Node = @startNode
+          union all
+          select 
+              a.TargetNode as Node,
+              cast(b.List + cast(a.TargetNode as varchar(3)) + '.' as varchar(max)) as List
+            from GraphTests01.Edge as a
+              inner join NodeList as b
+                on a.OriginNode = b.Node
+            where
+                GraphTests01.hasCycles(b.List) = 0
+          )
+          select nla.List 
+            from NodeList as nla
+            where not exists (
+              select *
+                from NodeList as nlb
+                where nlb.List like nla.List + '_%'
+            );          
+        </code></pre>
+        <p>
+          The logic is implemented using a recursive common table expression (CTE).
+        </p>
+        <p>
+          It uses the given node id as a seed for going through the edges of the graph,
+          and constructing the path as a string of natural numbers separated by the
+          '.' dot character.
+        </p>
+        <p>
+          Because the core logic extracts all paths including the partial ones, we
+          have to filter them in the last where clause applied to the <code>NodeList</code>
+          CTE.
+        </p>
+        <p>
+          If we run the function for node number 2:
+          <pre><code>
+              declare @startNode as int = 2;
+              select * from GraphTests01.getNodePaths(@startNode);
+              go            
+            </code></pre>          
+          We obtain the following results:
+          <pre><code>
+              List
+              -------------------------
+              2.2.
+              2.5.
+              2.3.5.
+              2.3.4.2.
+              2.3.4.1.2.
+              2.1.2.
+
+              (6 rows affected)            
+          </code></pre>
+        </p>
+      </article>
+      <article>
+        <h4>Observations</h4>
+        <p>
+          The <code>GraphTests01.hasCycles</code> uses <code>string_split</code>,
+          which first appeared in SQL Server 2016.
+        </p>
+      </article>
+    </section>
+    <footer>
+      <p>Serban Patriciu</p>
+    </footer>
+  </body>
+</html>      
