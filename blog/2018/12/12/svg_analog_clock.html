@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
+<head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Web programming - SVG Analog Clock</title>
   <meta name="description" content="javascript, svg">
-  <script href="svg_analog_clock.js" defer></script>
+  <script src="svg_analog_clock.js" defer></script>
 </head>
-  <body>
-    <header>            
-      <h2>Technical Experiments</h2>
-      <nav>
-        <a href="/about.html">About</a>
-        <a href="/index.html">Posts</a>
-      </nav>
-    </header>
-    <section>
-      <hgroup>
-        <h2>SVG Analog Clock</h2>
-        <h4><time date="2018-12-12" pubdate>December 12 2018</time></h4>
-      </hgroup>
-      <article>
-        <h3>12 hour analog clock</h3>   
-        <svg width="300" height="300">
-            <circle cx="150" cy="150" r="140" stroke="darkgray" stroke-width="6" fill="lightgray" />
-            <circle cx="150" cy="150" r="5" stroke="black" stroke-width="6" fill="lightgray" />
-            <line id="horar" x1="150" y1="150" x2="240" y2="150" stroke="black" stroke-width="8" stroke-linecap="round" />
-            <line id="minutar" x1="150" y1="150" x2="150" y2="280" stroke="black" stroke-width="8" stroke-linecap="round" />
-            <line id="secundar" x1="150" y1="150" x2="20" y2="150" stroke="black" stroke-width="2" stroke-linecap="round" />
-        </svg>    
-      </article>
-      <article>
-        <h4>Observations</h4>
-        <p>Nothing yet.</p>
-      </article>
-    </section>
-    <footer>
-      <p>Serban Patriciu</p>
-    </footer>
-  </body>
+<body>
+  <header>            
+    <h2>Technical Experiments</h2>
+    <nav>
+      <a href="/about.html">About</a>
+      <a href="/index.html">Posts</a>
+    </nav>
+  </header>
+  <section>
+    <hgroup>
+      <h2>SVG Analog Clock</h2>
+      <h4><time date="2018-12-12" pubdate>December 12 2018</time></h4>
+    </hgroup>
+    <article>
+      <h3>12 hour analog clock</h3>   
+      <svg width="300" height="300">
+          <circle cx="150" cy="150" r="140" stroke="darkgray" stroke-width="6" fill="lightgray"></circle>
+          <circle cx="150" cy="150" r="5" stroke="black" stroke-width="6" fill="lightgray"></circle>
+          <line id="horar" x1="150" y1="150" x2="240" y2="150" stroke="black" stroke-width="8" stroke-linecap="round"></line>
+          <line id="minutar" x1="150" y1="150" x2="150" y2="280" stroke="black" stroke-width="8" stroke-linecap="round"></line>
+          <line id="secundar" x1="150" y1="150" stroke="black" stroke-width="2" stroke-linecap="round" stroke-antialiasing="true"></line>
+      </svg>    
+    </article>
+    <article>
+      <h4>Observations</h4>
+      <p>Nothing yet.</p>
+    </article>
+  </section>
+  <footer>
+    <p>Serban Patriciu</p>
+  </footer>
+</body>
 </html>
