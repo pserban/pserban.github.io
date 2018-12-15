@@ -27,12 +27,24 @@
     <article>
       <h3>12 hour analog clock</h3>   
       <svg id="ceas" width="300" height="300">
-          <circle id="cadran" cx="150" cy="150" r="140" stroke="darkgray" stroke-width="6" fill="lightgray"></circle>
-          <circle cx="150" cy="150" r="5" stroke="#634545" stroke-width="6" fill="lightgray"></circle>
+          <defs>
+            <filter id="dropshadow"  height="140%" width="140%" filterUnits="userSpaceOnUse">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="2.2"></feGaussianBlur>
+              <feOffset dx="4" dy="4" result="offsetblur"></feOffset>
+              <feFlood flood-color="rgba(100,100,100,0.5)"></feFlood>
+              <feComposite in2="offsetblur" operator="in"></feComposite>
+              <feMerge>
+                <feMergeNode></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+              </feMerge>
+            </filter>
+          </defs>        
+          <circle id="cadran" cx="150" cy="150" r="140" stroke="darkgray" stroke-width="6" fill="lightgray" filter="url(#dropshadow)"></circle>
           <line id="orar" x1="150" y1="150" x2="240" y2="150" stroke="#634545" stroke-width="8" stroke-linecap="round"></line>
           <line id="minutar" x1="150" y1="150" x2="150" y2="280" stroke="#634545" stroke-width="8" stroke-linecap="round"></line>
           <line id="secundar" x1="150" y1="150" stroke="#634545" stroke-width="2" stroke-linecap="round" stroke-antialiasing="true"></line>
-      </svg>    
+          <circle cx="150" cy="150" r="5" stroke="#634545" stroke-width="6" fill="#634545"></circle>
+        </svg>    
     </article>
     <article>
       <h4>Observations</h4>
