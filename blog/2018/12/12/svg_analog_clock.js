@@ -38,18 +38,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function seteazaSimboluri() {
     seteazaPuncte();
-    // seteazaCifre();
+    seteazaCifre();
 }
 
 function seteazaCifre() {
     var ceas = document.getElementById("ceas");
+    var cadran = document.getElementById("cadran");
     for (i = 0; i < 12; i++) {
         var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        text.setAttributeNS(null, "x", 150 + 60 * Math.sin((i+1) * 2 * Math.PI / 12));
-        text.setAttributeNS(null, "y", 150 - 60 * Math.cos((i+1) * 2 * Math.PI / 12));
-        text.setAttributeNS(null, "style", "font: italic 10px serif; fill: red;");
-        text.text = "A";
-        ceas.appendChild(text);
+        text.setAttributeNS(null, "x", 150 + 110 * Math.sin((i+1) * 2 * Math.PI / 12));
+        text.setAttributeNS(null, "y", 150 - 110 * Math.cos((i+1) * 2 * Math.PI / 12) + 15);
+        text.setAttributeNS(null, "class", "cifra-ceas");
+        text.setAttributeNS(null, "text-anchor", "middle"); 
+        text.innerHTML = (i+1).toString();
+        cadran.parentNode.insertBefore(text, cadran.nextSibling);
     }
 }
 
