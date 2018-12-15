@@ -31,8 +31,39 @@ document.addEventListener("DOMContentLoaded", () => {
         seteazaCeas(centru, orar, minutar, secundar);
     }, 250);
 
+    seteazaSimboluri();
+
     document.getElementById("ceas").style.visibility = "visible";
 });
+
+function seteazaSimboluri() {
+    seteazaPuncte();
+    // seteazaCifre();
+}
+
+function seteazaCifre() {
+    var ceas = document.getElementById("ceas");
+    for (i = 0; i < 12; i++) {
+        var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttributeNS(null, "x", 150 + 60 * Math.sin((i+1) * 2 * Math.PI / 12));
+        text.setAttributeNS(null, "y", 150 - 60 * Math.cos((i+1) * 2 * Math.PI / 12));
+        text.setAttributeNS(null, "style", "font: italic 10px serif; fill: red;");
+        text.text = "A";
+        ceas.appendChild(text);
+    }
+}
+
+function seteazaPuncte() {
+    var ceas = document.getElementById("ceas");
+    for (i = 0; i < 60; i++) {
+        var cerc = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        cerc.setAttributeNS(null, "cx", 150 + 138 * Math.sin((i+1) * 2 * Math.PI / 60));
+        cerc.setAttributeNS(null, "cy", 150 - 138 * Math.cos((i+1) * 2 * Math.PI / 60));
+        cerc.setAttributeNS(null, "r", ((i + 1) % 5) === 0 ? 5 : 3);
+        cerc.setAttributeNS(null, "fill", "darkgray");
+        ceas.appendChild(cerc);
+    }
+}
 
 function pozitieLimba(centru, raza, cantitate, cantitate_maxima) {
     var punct = new Punct(0, 0);

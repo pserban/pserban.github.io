@@ -1,3 +1,8 @@
 #ceas {
     visibility: hidden;
 }
+
+.cifra-ceas {
+    font: italic 10px serif;
+    fill: red;
+}
