@@ -5,4 +5,5 @@
 .cifra-ceas {
     font: 40px serif;
     fill: dimgray;
+    text-shadow: 0 0 3px rgba(138, 42, 42, 0.5);
 }
