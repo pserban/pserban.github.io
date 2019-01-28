@@ -7,53 +7,80 @@
 
   <title>Technical Experiments - SQL Server DBA and Developer</title>
   <meta name="description" content="sql server database administrator, sql developer">
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/bootstrap-social.css">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <header>
-    <h2>Technical Experiments</h2>
-    <nav>
-      <a href="about.html">About</a>
-      <a href="index.html">Posts</a>
-    </nav>
+  <nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">Technical Experiments</a>
+      <div class="collapse navbar-collapse" id="Navbar">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#"><span class="fa fa-home fa-lg"></span> Home</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <header class="jumbotron">
+    <div class="container">
+      <div class="row row-header">
+        <div class="col-12 col-sm-6">
+          <h1>Technical Experiments</h1>
+          <p>This site contains technical experiments and other work-related matters that I found of interest.</p>
+        </div>
+      </div>
+    </div>
   </header>
-  <p>This site contains technical experiments and other work-related things 
-    that I found interesting.
-  </p>
-  <section>
-    <h2>Blog List</h2>
-    <article>
-      <h3>
-        <time date="2017-10-25" pubdate>October 25, 2017</time>
-      </h3>
-      <a href="blog/2017/10/25/factorial-pester.html">
-        Factorial functions in Powershell tested with Pester
-      </a>
-    </article>
-    <article>
-      <h3>
-        <time date="2017-10-29" pubdate>October 29, 2017</time>
-      </h3>
-      <a href="blog/2017/10/29/tsql_graph_path_enumeration.html">
-        Graph path enumeration in SQL Server using T-SQL
-      </a>
-    </article>
-    <article>
-      <h3>
-        <time date="2018-12-12" pubdate>December 12, 2018</time>
-      </h3>
-      <a href="blog/2018/12/12/svg_analog_clock.html">
-        An analog HTML clock using SVG
-      </a>
-    </article>
-  </section>
-  <footer>
-    <p>Serban Patriciu</p>
+  <div class="container">
+    <div class="row row-content align-items-center">
+      <div class="col-12 col-sm-4 order-sm-last col-md-3">
+        <h3>Blog</h3>
+      </div>
+      <div class="col col-sm order-sm-first col-md">
+        <p class="d-none d-sm-block">Almost random bits of information and little experiments make at a certain point in time.</p>
+      </div>
+    </div>
+    <div class="row row-content align-items-center">
+      <div class="col-12 col-sm-4 order-sm-first col-md-3">
+        <h3>Projects</h3>
+      </div>
+      <div class="col col-sm order-sm-last col-md">
+        <p class="d-none d-sm-block">More extensive, focalized information about certain subjects.</p>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-4 offset-1 col-sm-2">
+          <h5>Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="#">Home</a></li>
+            <li><a href="./blog.html">Blog</a></li>
+            <li><a href="./projects.html">Projects</a></li>
+          </ul>
+        </div>
+        <div class="col-7 col-sm-5">
+          <h5>Serban Patriciu</h5>
+        </div>
+        <div class="col-12 col-sm-4">
+          <div class="text-center">
+            <a href="https://www.linkedin.com/in/serban-patriciu">LinkedIn</a>
+            <a href="https://www.youtube.com/channel/UClmkhJiQkuPkqPece9qo7jA">YouTube</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </footer>
   <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
-  <script src="/scripts/jquery-3.3.1.min.js"></script>
-  <script src="/scripts/popper.min.js"></script>
-  <script src="/scripts/jquery-3.3.1.min.js"></script>
-</body>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script></body>
 </html>
